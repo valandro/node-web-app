@@ -13,3 +13,4 @@ app.get('/',function(req,res){
 });
 
 app.listen(process.env.port || port);
+console.log(`Your server is running on port: ${port}`);
