@@ -33,4 +33,4 @@ Express is a minimal and flexible Node.js web application framework that provide
 ```
 
 ### License
-MIT License -see the [LICENSE.md](LICENSE.md) for more details.
+MIT License - see the [LICENSE.md](LICENSE.md) for more details.
