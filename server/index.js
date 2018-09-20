@@ -4,12 +4,12 @@ import path from 'path';
 const app = express();
 const port = 3000;
 
-app.use(express.static(path.join(__dirname, '../public/src')));
-app.use(express.static(path.join(__dirname, '../public')));
-app.set('view engine', 'html');
+app.set('views', path.join(__dirname, '../public/src/'));
+app.use(express.static(path.join(__dirname, '../dist')));
+app.set('view engine', 'ejs');
 
 app.get('/',function(req,res){
-    res.sendFile('index');
+    res.render('index');
 });
 
 app.listen(process.env.port || port);
