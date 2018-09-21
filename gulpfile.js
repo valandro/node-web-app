@@ -1,9 +1,10 @@
 'use strict';
  
-var gulp = require('gulp');
-var sass = require('gulp-sass');
-var uglifycss = require('gulp-uglifycss');
+const gulp = require('gulp');
+const sass = require('gulp-sass');
+const uglifycss = require('gulp-uglifycss');
 const minify = require('gulp-minify');
+const nodemon = require('gulp-nodemon');
 
 gulp.task('sass', function () {
     return gulp.src('./public/sass/*.scss')
@@ -30,12 +31,24 @@ gulp.task('include-views', function(){
         .pipe(gulp.dest('./dist/views'));
 });
 
-gulp.task('build', gulp.series(['sass']));
-gulp.task('prod', gulp.series(['sass','minify-css','minify-js','include-views']));
+gulp.task('nodemon', function(callback){
+    let started = false;
+    return nodemon({
+        script: 'dist/index.js'
+      }).on('start', function(){
+        if(!started){
+            callback();
+            started = true;
+        }
+      });
+});
+
+gulp.task('build', gulp.series(['sass','minify-css','minify-js','include-views']));
 
 gulp.task('watch', function(){
     gulp.watch('./public/sass/*.scss', gulp.series('sass'));
-    gulp.watch('./public/css/*.css', gulp.series('css'));
+    gulp.watch('./public/css/*.css', gulp.series('minify-css'));
+    gulp.watch('./public/src/**/*.*', gulp.series('include-views'));
 });
 
-gulp.task('default', gulp.series(['build']));
+gulp.task('default', gulp.series(['nodemon','watch']));
