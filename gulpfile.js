@@ -5,6 +5,7 @@ const sass = require('gulp-sass');
 const uglifycss = require('gulp-uglifycss');
 const minify = require('gulp-minify');
 const nodemon = require('gulp-nodemon');
+const image = require('gulp-image');
 
 gulp.task('sass', function () {
     return gulp.src('./public/sass/*.scss')
@@ -43,12 +44,19 @@ gulp.task('nodemon', function(callback){
       });
 });
 
-gulp.task('build', gulp.series(['sass','minify-css','minify-js','include-views']));
+gulp.task('image', function () {
+    return gulp.src('./public/img/*.png')
+      .pipe(image())
+      .pipe(gulp.dest('./dist/img'));
+});
+
+gulp.task('build', gulp.series(['sass','minify-css','minify-js','include-views', 'image']));
 
 gulp.task('watch', function(){
     gulp.watch('./public/sass/*.scss', gulp.series('sass'));
     gulp.watch('./public/css/*.css', gulp.series('minify-css'));
     gulp.watch('./public/src/**/*.*', gulp.series('include-views'));
+    gulp.watch('./public/img/*.png', gulp.series('image'));
 });
 
 gulp.task('default', gulp.series(['nodemon','watch']));
